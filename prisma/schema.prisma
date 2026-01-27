@@ -13,18 +13,84 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+enum Role {
+  STUDENT
+  TUTOR
+  ADMIN
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+enum BookingStatus {
+  UPCOMING
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  role Role
+  isBanned Boolean @default(false)
+  createdAt DateTime @default(now())
+
+  tutorProfile TutorProfile?
+  studentBookings Booking[] @relation("StudentBookings")
+  reviews Review[]
+}
+
+model TutorProfile {
+  id String @id @default(uuid())
+  userId String @unique
+  bio String
+  pricePerHr Int
+  rating Float @default(0)
+
+  user User @relation(fields: [userId], references: [id])
+  categories Category[]
+  availability Availability[]
+  bookings Booking[]
+  reviews Review[]
+}
+
+model Category{
+  id String @id @default(uuid())
+  name String @unique
+
+  tutors TutorProfile[]
+}
+
+model Availability {
+  id String @id @default(uuid())
+  tutorId String
+  day String
+  startTime String
+  endTime String
+
+  tutor TutorProfile @relation(fields: [tutorId], references: [id])
+}
+
+model Booking {
+  id String @id @default(uuid())
+  studentId String
+  tutorId String
+  status BookingStatus @default(UPCOMING)
+  createdAt DateTime @default(now())
+
+  student User @relation("StudentBookings", fields: [studentId], references: [id])
+  tutor TutorProfile @relation(fields: [tutorId], references: [id])
+}
+
+model Review {
+  id String @id @default(uuid())
+  rating Int
+  comment String
+  createdAt DateTime @default(now())
+
+  studentId String
+  tutorId String
+
+  student User @relation(fields: [studentId], references: [id])
+  tutor TutorProfile @relation(fields: [tutorId], references: [id])
+
 }

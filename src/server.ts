@@ -1,14 +1,14 @@
-// import { PrismaPg } from "@prisma/adapter-pg";
+
 
 import app from "./app";
 
-// async function main () {
-//     try {
-//         await PrismaPg.$connect();
-//     } catch (error) {
+async function main () {
+    try {
+        await prisma.$connect();
+    } catch (error) {
         
-//     }
-// }
+    }
+}
 
 const PORT = process.env.PORT || 5000;
 
