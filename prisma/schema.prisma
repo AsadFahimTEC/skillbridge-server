@@ -43,6 +43,8 @@ model User {
   sessions        Session[]
   accounts        Account[]
 
+  Role String? @default("STUDENT")
+
   @@map("user")
 }
 
