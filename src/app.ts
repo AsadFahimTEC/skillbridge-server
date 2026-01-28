@@ -1,3 +1,4 @@
+import { tutorRouter } from './modules/tutor/tutor.routes';
 import { authRouter } from './modules/auth/auth.routes';
 
 import express, { type Application } from "express";
@@ -22,6 +23,7 @@ app.use(express.json());
 app.all("/api/auth/*splat", toNodeHandler(auth))
 
 app.use("/api/auth", authRouter);
+app.use("/api/tutors", tutorRouter);
 
 app.get("/", (req, res) => {
     res.send("SkillBridge is Running!")
