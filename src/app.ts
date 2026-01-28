@@ -1,3 +1,4 @@
+import { authRouter } from './modules/auth/auth.routes';
 
 import express, { type Application } from "express";
 import cors from "cors";
@@ -5,7 +6,9 @@ import cors from "cors";
 import { toNodeHandler } from "better-auth/node";
 
 import {auth} from "../src/lib/auth";
-import authRoutes from "./modules/auth/auth.routes"
+
+import errorHandler from "./middlewares/globalErrorHandling";
+import { notFound } from "./middlewares/notFound";
 
 const app: Application = express();
 
@@ -14,14 +17,18 @@ app.use(cors({
     credentials: true
 }))
 
-app.all("/api/auth/*splat", toNodeHandler(auth))
-
 app.use(express.json());
 
-app.use("/api/auth", authRoutes);
+app.all("/api/auth/*splat", toNodeHandler(auth))
+
+app.use("/api/auth", authRouter);
 
 app.get("/", (req, res) => {
     res.send("SkillBridge is Running!")
 })
+
+app.use(notFound);
+
+app.use(errorHandler);
 
 export default app;

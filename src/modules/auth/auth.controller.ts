@@ -1,57 +1,64 @@
+import { authService } from './auth.service';
 import { Request, Response } from "express";
 import { auth } from "../../lib/auth";
 
-export const register = async(req: Request, res: Response) => {
+const register = async (req: Request, res: Response) => {
     try {
-        const user = await auth.api.register(req.body);
+        const user = await authService.register(req.body);
         return res.status(201).json({
-                success: true,
-                message: "User registered successfully.",
-                data: user,
-            });
+            success: true,
+            message: "User registered successfully.",
+            data: user,
+        });
     } catch (error: any) {
         return res.status(400).json({
-                success: false,
-                message: error?.message || "Registration failed",
-            });
+            success: false,
+            message: error?.message || "Registration failed",
+        });
     }
 };
 
-export const login = async(req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {
     try {
-        const session = await auth.api.login(req.body);
+        const session = await authService.login(req.body);
         return res.status(201).json({
-                success: true,
-                message: "Login successful.",
-                data: session,
-            });
+            success: true,
+            message: "Login successful.",
+            data: session,
+        });
     } catch (error: any) {
         return res.status(400).json({
-                success: false,
-                message: error?.message || "Invalid email or password",
-            });
+            success: false,
+            message: error?.message || "Invalid email or password",
+        });
     }
 };
 
-export const getMe = async(req: Request, res: Response) => {
+const getMe = async (req: Request, res: Response) => {
     try {
-        const user = await auth.api.getUser(req.body);
+        const user = await authService.me(req.body); 
 
-        if(!user){
+        if (!user) {
             return res.status(401).json({
                 success: false,
                 message: "User not authenticated",
             })
         }
         return res.status(201).json({
-                success: true,
-                message: "User fetched successfully.",
-                data: user,
-            });
+            success: true,
+            message: "User fetched successfully.",
+            data: user,
+        });
     } catch (error: any) {
         return res.status(400).json({
-                success: false,
-                message: error?.message || "Failed to fetch user",
-            });
+            success: false,
+            message: error?.message || "Failed to fetch user",
+        });
     }
 };
+
+export const authController = {
+    register,
+    login,
+    getMe
+}
