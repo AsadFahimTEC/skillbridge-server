@@ -1,3 +1,4 @@
+import { adminRouter } from './modules/admin/admin.routes';
 import { reviewRouter } from './modules/review/review.routes';
 import { bookingRouter } from './modules/booking/booking.routes';
 import { categoryRouter } from './modules/category/category.routes';
@@ -30,6 +31,7 @@ app.use("/api/tutors", tutorRouter);
 app.use("/categories", categoryRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/reviews", reviewRouter);
+app.use("/api/admin", adminRouter);
 
 app.get("/", (req, res) => {
     res.send("SkillBridge is Running!")
