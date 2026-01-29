@@ -1,0 +1,16 @@
+import express, { Router } from "express";
+import  auth, { UserRole } from '../../middlewares/auth';
+import { bookingController } from "./booking.controller";
+
+const router = express.Router();
+
+// get the private routes
+
+router.get("/", auth(UserRole.STUDENT), bookingController.getMyBookings);
+
+router.get("/:id", auth(UserRole.STUDENT), bookingController.getBookingDetails);
+
+router.post("/", auth(UserRole.STUDENT), bookingController.createBooking);
+
+
+export const bookingRouter: Router = router;
