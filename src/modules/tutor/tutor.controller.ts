@@ -46,7 +46,7 @@ const updateTutorProfile = async(req: Request, res: Response) => {
 
     res.status(200).json({
         success: true,
-        message: "Tutor profile created",
+        message: "Tutor profile updated",
         data: profile,
     })
 }
@@ -62,15 +62,24 @@ const setAvailability = async(req: Request, res: Response) => {
     })
 }
 
-const tutorDashboard= async(req: Request, res: Response) => {
-    const userId = req.user?.id;
-    const dashboard= await tutorService.getTutorDashboard(userId as string);
+const getTutorDashboard = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
 
-    res.status(200).json({
-        success: true,
-        data: dashboard,
-    })
-}
+  if (!userId) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized",
+    });
+  }
+
+  const dashboard = await tutorService.getTutorDashboard(userId);
+
+  res.status(200).json({
+    success: true,
+    data: dashboard,
+  });
+};
+
 
 
 export const tutorController = {
@@ -79,6 +88,5 @@ export const tutorController = {
     createTutorProfile,
     updateTutorProfile,
     setAvailability,
-    tutorDashboard,
-
+    getTutorDashboard,
 }

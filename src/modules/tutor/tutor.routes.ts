@@ -10,13 +10,16 @@ router.get("/", tutorController.listTutors);
 
 router.get("/:id", tutorController.tutorDetails);
 
+
 // get the private routes
+router.get("/dashboard", auth(UserRole.TUTOR), tutorController.getTutorDashboard)
+
 router.post("/profile", auth(UserRole.TUTOR), tutorController.createTutorProfile)
 
 router.put("/profile", auth(UserRole.TUTOR), tutorController.updateTutorProfile)
 
 router.put("/availability", auth(UserRole.TUTOR), tutorController.setAvailability)
 
-router.get("/dashboard", auth(UserRole.TUTOR), tutorController.tutorDashboard)
+
 
 export const tutorRouter: Router = router;
