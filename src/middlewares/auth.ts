@@ -1,4 +1,4 @@
-import { auth as betterAuth } from './../lib/auth';
+import { auth as betterAuth } from '../lib/auth';
 import { NextFunction, Request, Response } from "express";
 
 export enum UserRole {

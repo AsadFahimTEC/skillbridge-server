@@ -6,7 +6,7 @@ import cors from "cors";
 
 import { toNodeHandler } from "better-auth/node";
 
-import {auth} from "../src/lib/auth";
+import {auth} from "./lib/auth";
 
 import errorHandler from "./middlewares/globalErrorHandling";
 import { notFound } from "./middlewares/notFound";

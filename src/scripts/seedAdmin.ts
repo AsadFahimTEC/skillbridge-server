@@ -1,6 +1,6 @@
+import { UserRole } from './../middlewares/auth';
 
 import { prisma } from "../lib/prisma";
-import { UserRole } from "../middlewares/auth";
 
 
 async function seedAdmin() {
@@ -8,10 +8,9 @@ async function seedAdmin() {
         console.log("***** Admin seeding started");
         const adminData = {
             name: "Admin Shaheb",
-            email: "admin5@skillbrige.com",
+            email: "admin6@skillbridge.com",
             password: "admin1234",
             role: UserRole.ADMIN,
-            emailVerified: true
         }
         console.log("***** Checking Admin Exist or not");
         // check user exist on db or not
@@ -28,7 +27,8 @@ async function seedAdmin() {
         const signUpAdmin = await fetch("http://localhost:5000/api/auth/sign-up/email", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Origin": "http://localhost:3000",
             },
             body: JSON.stringify(adminData)
         })
