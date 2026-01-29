@@ -1,3 +1,4 @@
+import { categoryRouter } from './modules/category/category.routes';
 import { tutorRouter } from './modules/tutor/tutor.routes';
 import { authRouter } from './modules/auth/auth.routes';
 
@@ -24,6 +25,7 @@ app.all("/api/auth/*splat", toNodeHandler(auth))
 
 app.use("/api/auth", authRouter);
 app.use("/api/tutors", tutorRouter);
+app.use("/categories", categoryRouter);
 
 app.get("/", (req, res) => {
     res.send("SkillBridge is Running!")
