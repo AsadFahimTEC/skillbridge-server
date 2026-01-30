@@ -12,7 +12,7 @@ router.get("/:id", tutorController.tutorDetails);
 
 
 // get the private routes
-router.get("/dashboard", auth(UserRole.TUTOR), tutorController.getTutorDashboard)
+router.get("/", auth(UserRole.TUTOR), tutorController.getTutorDashboard)
 
 router.post("/profile", auth(UserRole.TUTOR), tutorController.createTutorProfile)
 

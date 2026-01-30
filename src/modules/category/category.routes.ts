@@ -1,9 +1,10 @@
 import express, { Router } from "express";
 import {prisma} from "../../lib/prisma";
+import  auth, { UserRole } from '../../middlewares/auth';
 
 const router = express.Router();
 
-router.get("/", async(req, res) => {
+router.get("/", auth(UserRole.ADMIN), async(req, res) => {
     const categories = await prisma.category.findMany();
     res.json({
         success: true,

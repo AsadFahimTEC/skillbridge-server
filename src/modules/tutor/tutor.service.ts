@@ -135,44 +135,24 @@ const setAvailability = async (userId: string, slots: any[]) => {
     });
 };
 
-const getTutorDashboard = async (userId: string) => {
-  const tutor = await prisma.tutorProfile.findFirst({
-    where: { userId },
-  });
-
-  if (!tutor) {
-    return {
-      totalSessions: 0,
-      completedSessions: 0,
-      upcomingSessions: [],
-      message: "Tutor profile not created yet",
-    };
-  }
-
-  const bookings = await prisma.booking.findMany({
-    where: {
-      tutorId: tutor.id,
-    },
-    include: {
-      student: {
+const getTutorDashboard = async () => {
+    return await prisma.tutorProfile.findMany({
         select: {
-          id: true,
-          name: true,
-          email: true,
+            userId: true,
+            id: true,
+            bio: true,
+            pricePerHr: true,
+            rating: true,
+            user: {
+                select: {
+                    name: true,
+                    email: true,
+                    image: true
+                }
+            }
         },
-      },
-    },
-  });
 
-  return {
-    totalSessions: bookings.length,
-    completedSessions: bookings.filter(
-      (b) => b.status === "COMPLETED"
-    ).length,
-    upcomingSessions: bookings.filter(
-      (b) => b.status === "UPCOMING"
-    ),
-  };
+    });
 };
 
 export const tutorService = {

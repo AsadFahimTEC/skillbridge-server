@@ -44,9 +44,68 @@ const getBookingById = async (bookingId: string, studentId: string) => {
     });
 };
 
+const getAllTutors = async () => {
+    return await prisma.tutorProfile.findMany({
+        select: {
+            userId: true,
+            id: true,
+            bio: true,
+            pricePerHr: true,
+            rating: true,
+            user: {
+                select: {
+                    name: true,
+                    email: true,
+                    image: true
+                }
+            }
+        },
+
+    });
+};
+
+const updateProfile = async (userId: string, data: any) => {
+    // check tutor profile exists
+    const existingProfile = await prisma.tutorProfile.findUnique({
+        where: { userId },
+    });
+
+    if (!existingProfile) {
+        // create if not exists
+        return prisma.tutorProfile.create({
+            data: {
+                userId,
+                bio: data.bio,
+                pricePerHr: data.pricePerHr,
+                categories: {
+                    connect: data.categoryIds.map((id: string) => ({ id })),
+                },
+            },
+            include: { categories: true },
+        });
+    }
+
+    // update if exists
+    return prisma.tutorProfile.update({
+        where: { userId },
+        data: {
+            bio: data.bio,
+            pricePerHr: data.pricePerHr,
+            categories: {
+                set: data.categoryIds.map((id: string) => ({ id })),
+            },
+        },
+        include: { categories: true },
+    });
+};
+
+
+
 export const bookingService = {
     createBooking,
     getMyBookings,
     getBookingById,
+    getAllTutors,
+    updateProfile
 
 }

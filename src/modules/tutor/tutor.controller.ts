@@ -63,21 +63,13 @@ const setAvailability = async(req: Request, res: Response) => {
 }
 
 const getTutorDashboard = async (req: Request, res: Response) => {
-  const userId = req.user?.id;
+    const tutors = await tutorService.getTutorDashboard();
 
-  if (!userId) {
-    return res.status(401).json({
-      success: false,
-      message: "Unauthorized",
+    res.status(200).json({
+        success: true,
+        message: "All Tutors retrieved successfully",
+        data: tutors,
     });
-  }
-
-  const dashboard = await tutorService.getTutorDashboard(userId);
-
-  res.status(200).json({
-    success: true,
-    data: dashboard,
-  });
 };
 
 

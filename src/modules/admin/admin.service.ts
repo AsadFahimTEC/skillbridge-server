@@ -12,6 +12,18 @@ const getAllUsers = async () => {
     });
 };
 
+const getAllBookings = async () => {
+    return await prisma.booking.findMany({
+        select: {
+            id: true,
+            studentId: true,
+            tutorId: true,
+            status: true,
+            createdAt: true,
+        },
+    });
+};
+
 const updateUserStatus = async (id: string, isBanned: boolean) => {
     return await prisma.user.update({
         where: { id },
@@ -21,5 +33,6 @@ const updateUserStatus = async (id: string, isBanned: boolean) => {
 
 export const adminService = {
     getAllUsers,
+    getAllBookings,
     updateUserStatus,
 }

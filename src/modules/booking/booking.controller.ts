@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { bookingService } from "./booking.service";
 
+
 const createBooking = async (req: Request, res: Response) => {
     try {
         // const userId = req.user!.id;
@@ -48,8 +49,38 @@ const getBookingDetails = async (req: Request, res: Response) => {
     res.json({ success: true, data: booking });
 };
 
+const getAllTutors = async (req: Request, res: Response) => {
+    const tutors = await bookingService.getAllTutors();
+
+    res.status(200).json({
+        success: true,
+        message: "All Tutors retrieved successfully",
+        data: tutors,
+    });
+};
+
+const updateTutorProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user!.id;
+
+        const profile = await bookingService.updateProfile(userId, req.body);
+
+        res.status(200).json({
+            success: true,
+            message: "Tutor profile updated successfully",
+            data: profile,
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message || "Failed to update tutor profile",
+        });
+    }
+};
 export const bookingController = {
     createBooking,
     getMyBookings,
     getBookingDetails,
+    getAllTutors,
+    updateTutorProfile,
 }
