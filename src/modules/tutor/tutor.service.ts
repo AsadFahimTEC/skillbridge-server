@@ -49,54 +49,54 @@ const getTutorById = (id: string) => {
 // private route
 
 const createProfile = async (userId: string, data: any) => {
-  // Check user exists
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
+    // Check user exists
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+    });
 
-  if (!user) {
-    throw new Error("User not found");
-  }
+    if (!user) {
+        throw new Error("User not found");
+    }
 
-  // Prevent duplicate tutor profile
-  const existingProfile = await prisma.tutorProfile.findUnique({
-    where: { userId },
-  });
+    // Prevent duplicate tutor profile
+    const existingProfile = await prisma.tutorProfile.findUnique({
+        where: { userId },
+    });
 
-  if (existingProfile) {
-    throw new Error("Tutor profile already exists");
-  }
+    if (existingProfile) {
+        throw new Error("Tutor profile already exists");
+    }
 
-  // Validate categories
-  if (!data.categoryIds || data.categoryIds.length === 0) {
-    throw new Error("At least one category is required");
-  }
+    // Validate categories
+    if (!data.categoryIds || data.categoryIds.length === 0) {
+        throw new Error("At least one category is required");
+    }
 
-  const categories = await prisma.category.findMany({
-    where: {
-      id: { in: data.categoryIds },
-    },
-  });
+    const categories = await prisma.category.findMany({
+        where: {
+            id: { in: data.categoryIds },
+        },
+    });
 
-  if (categories.length !== data.categoryIds.length) {
-    throw new Error("One or more categories not found");
-  }
+    if (categories.length !== data.categoryIds.length) {
+        throw new Error("One or more categories not found");
+    }
 
-  // Create tutor profile
-  return prisma.tutorProfile.create({
-    data: {
-      userId,
-      bio: data.bio,
-      pricePerHr: Number(data.pricePerHr),
-      categories: {
-        connect: data.categoryIds.map((id: string) => ({ id })),
-      },
-    },
-    include: {
-      categories: true,
-      user: true,
-    },
-  });
+    // Create tutor profile
+    return prisma.tutorProfile.create({
+        data: {
+            userId,
+            bio: data.bio,
+            pricePerHr: Number(data.pricePerHr),
+            categories: {
+                connect: data.categoryIds.map((id: string) => ({ id })),
+            },
+        },
+        include: {
+            categories: true,
+            user: true,
+        },
+    });
 };
 
 const updateProfile = (userId: string, data: any) => {
@@ -135,6 +135,21 @@ const setAvailability = async (userId: string, slots: any[]) => {
     });
 };
 
+const getAvailability = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user?.id;
+        const availability = await tutorService.getAvailability(userId as string);
+
+        res.status(200).json({
+            success: true,
+            message: "Availability fetched",
+            data: availability,
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
 const getTutorDashboard = async () => {
     return await prisma.tutorProfile.findMany({
         select: {
@@ -161,6 +176,7 @@ export const tutorService = {
     createProfile,
     updateProfile,
     setAvailability,
+    getAvailability,
     getTutorDashboard,
 
 }

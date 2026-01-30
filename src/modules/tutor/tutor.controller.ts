@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { tutorService } from "./tutor.service";
+import { prisma } from "../../lib/prisma";
 
 // public routes
 
@@ -69,6 +70,22 @@ const setAvailability = async(req: Request, res: Response) => {
     })
 }
 
+const getAvailability = async (userId: string) => {
+    const tutor = await prisma.tutorProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!tutor) throw new Error("Tutor not found");
+
+    return prisma.availability.findMany({
+      where: { tutorId: tutor.id },
+      orderBy: [
+        { day: 'asc' },
+        { startTime: 'asc' }
+      ],
+    });
+}
+
 const getTutorDashboard = async (req: Request, res: Response) => {
     const tutors = await tutorService.getTutorDashboard();
 
@@ -87,5 +104,6 @@ export const tutorController = {
     createTutorProfile,
     updateTutorProfile,
     setAvailability,
+    getAvailability,
     getTutorDashboard,
 }
