@@ -1129,7 +1129,7 @@ function notFound(req, res) {
 // src/app.ts
 var app = express7();
 app.use(cors({
-  origin: process.env.APP_URL || "http://localhost:3000",
+  origin: process.env.APP_URL || "https://skillbridge-client-flame.vercel.app",
   credentials: true
 }));
 app.use(express7.json());
