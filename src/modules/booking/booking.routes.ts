@@ -16,5 +16,7 @@ router.post("/", auth(UserRole.STUDENT), bookingController.createBooking);
 
 router.put("/profiles", auth(UserRole.STUDENT), bookingController.updateTutorProfile);
 
+router.patch("/:id", auth(UserRole.STUDENT), bookingController.cancelBooking);
+
 
 export const bookingRouter: Router = router;

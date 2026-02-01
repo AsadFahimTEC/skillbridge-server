@@ -374,6 +374,18 @@ var auth = betterAuth({
       }
     }
   },
+  advanced: {
+    cookiePrefix: "better-auth",
+    useSecureCookies: true,
+    defaultCookieAttributes: {
+      sameSite: "none",
+      // local testing should be "lax"
+      secure: true,
+      // on local testing should be false
+      httpOnly: true
+      // on local testing should be false
+    }
+  },
   socialProviders: {
     google: {
       prompt: "select_account consent",
@@ -1129,7 +1141,7 @@ function notFound(req, res) {
 // src/app.ts
 var app = express7();
 app.use(cors({
-  origin: process.env.APP_URL || "https://skillbridge-client-flame.vercel.app",
+  origin: process.env.APP_URL || "http://localhost:3000",
   credentials: true
 }));
 app.use(express7.json());

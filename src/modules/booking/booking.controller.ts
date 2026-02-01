@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { bookingService } from "./booking.service";
+import { prisma } from "../../lib/prisma";
 
 
 const createBooking = async (req: Request, res: Response) => {
@@ -77,10 +78,37 @@ const updateTutorProfile = async (req: Request, res: Response) => {
         });
     }
 };
+
+const cancelBooking = async (bookingId: string, studentId: string) => {
+  // 1️⃣ Find booking
+  const booking = await prisma.booking.findFirst({
+    where: {
+      id: bookingId,
+      studentId,
+    },
+  });
+
+  if (!booking) return null;
+
+  // 2️⃣ If already cancelled, return it
+  if (booking.status === "CANCELLED") {
+    return booking;
+  }
+
+  // 3️⃣ Update booking status
+  const updatedBooking = await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status: "CANCELLED" },
+  });
+
+  return updatedBooking;
+};
+
 export const bookingController = {
     createBooking,
     getMyBookings,
     getBookingDetails,
     getAllTutors,
     updateTutorProfile,
+    cancelBooking
 }

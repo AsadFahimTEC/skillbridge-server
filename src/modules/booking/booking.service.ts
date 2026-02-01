@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { BookingStatus } from "../../../generated/prisma/enums"
 import { prisma } from "../../lib/prisma"
 
@@ -99,6 +100,35 @@ const updateProfile = async (userId: string, data: any) => {
     });
 };
 
+const cancelBooking = async (req: Request<{ id: string }>, res: Response) => {
+  try {
+    const bookingId = req.params.id;
+    const studentId = req.user!.id; // comes from auth middleware
+
+    // Call service to cancel booking
+    const booking = await bookingService.cancelBooking(bookingId, studentId);
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found or not owned by you",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Booking cancelled successfully",
+      data: booking,
+    });
+  } catch (err: any) {
+    console.error("Cancel booking error:", err.message || err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to cancel booking",
+    });
+  }
+};
 
 
 export const bookingService = {
@@ -106,6 +136,7 @@ export const bookingService = {
     getMyBookings,
     getBookingById,
     getAllTutors,
-    updateProfile
+    updateProfile,
+    cancelBooking
 
 }
