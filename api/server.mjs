@@ -781,7 +781,7 @@ var bookingRouter = router3;
 // src/modules/category/category.routes.ts
 import express4 from "express";
 var router4 = express4.Router();
-router4.get("/", auth_default("ADMIN" /* ADMIN */), async (req, res) => {
+router4.get("/admin", auth_default("ADMIN" /* ADMIN */), async (req, res) => {
   const categories = await prisma.category.findMany();
   res.json({
     success: true,
@@ -1192,7 +1192,7 @@ app.use(express7.json());
 app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use("/api/auth", authRouter);
 app.use("/api/tutors", tutorRouter);
-app.use("/categories", categoryRouter);
+app.use("/api/categories", categoryRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/reviews", reviewRouter);
 app.use("/api/admin", adminRouter);
