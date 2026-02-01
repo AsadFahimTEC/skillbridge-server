@@ -646,12 +646,37 @@ var updateProfile = async (userId, data) => {
     include: { categories: true }
   });
 };
+var cancelBooking = async (req, res) => {
+  try {
+    const bookingId = req.params.id;
+    const studentId = req.user.id;
+    const booking = await bookingService.cancelBooking(bookingId, studentId);
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found or not owned by you"
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Booking cancelled successfully",
+      data: booking
+    });
+  } catch (err) {
+    console.error("Cancel booking error:", err.message || err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to cancel booking"
+    });
+  }
+};
 var bookingService = {
   createBooking,
   getMyBookings,
   getBookingById,
   getAllTutors,
-  updateProfile
+  updateProfile,
+  cancelBooking
 };
 
 // src/modules/booking/booking.controller.ts
@@ -717,12 +742,30 @@ var updateTutorProfile = async (req, res) => {
     });
   }
 };
+var cancelBooking2 = async (bookingId, studentId) => {
+  const booking = await prisma.booking.findFirst({
+    where: {
+      id: bookingId,
+      studentId
+    }
+  });
+  if (!booking) return null;
+  if (booking.status === "CANCELLED") {
+    return booking;
+  }
+  const updatedBooking = await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status: "CANCELLED" }
+  });
+  return updatedBooking;
+};
 var bookingController = {
   createBooking: createBooking2,
   getMyBookings: getMyBookings2,
   getBookingDetails,
   getAllTutors: getAllTutors2,
-  updateTutorProfile
+  updateTutorProfile,
+  cancelBooking: cancelBooking2
 };
 
 // src/modules/booking/booking.routes.ts
@@ -732,6 +775,7 @@ router3.get("/:id", auth_default("STUDENT" /* STUDENT */), bookingController.get
 router3.get("/", auth_default("STUDENT" /* STUDENT */), bookingController.getAllTutors);
 router3.post("/", auth_default("STUDENT" /* STUDENT */), bookingController.createBooking);
 router3.put("/profiles", auth_default("STUDENT" /* STUDENT */), bookingController.updateTutorProfile);
+router3.patch("/:id", auth_default("STUDENT" /* STUDENT */), bookingController.cancelBooking);
 var bookingRouter = router3;
 
 // src/modules/category/category.routes.ts
@@ -1141,7 +1185,7 @@ function notFound(req, res) {
 // src/app.ts
 var app = express7();
 app.use(cors({
-  origin: process.env.APP_URL || "http://localhost:3000",
+  origin: process.env.APP_URL || "https://skillbridge-client-flame.vercel.app",
   credentials: true
 }));
 app.use(express7.json());

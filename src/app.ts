@@ -33,7 +33,7 @@ app.all("/api/auth/*splat", toNodeHandler(auth))
 
 app.use("/api/auth", authRouter);
 app.use("/api/tutors", tutorRouter);
-app.use("/categories", categoryRouter);
+app.use("/api/categories", categoryRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/reviews", reviewRouter);
 app.use("/api/admin", adminRouter);
