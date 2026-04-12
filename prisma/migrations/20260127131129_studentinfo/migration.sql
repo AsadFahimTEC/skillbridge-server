@@ -7,7 +7,7 @@
 
 */
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('STUDENT', 'TUTOR', 'ADMIN');
+CREATE TYPE "Role" AS ENUM ('User', 'Admin', 'Manager', 'Vendor', 'Organizer');
 
 -- CreateEnum
 CREATE TYPE "BookingStatus" AS ENUM ('UPCOMING', 'COMPLETED', 'CANCELLED');

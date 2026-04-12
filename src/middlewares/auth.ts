@@ -2,9 +2,11 @@ import { auth as betterAuth } from '../lib/auth';
 import { NextFunction, Request, Response } from "express";
 
 export enum UserRole {
-    STUDENT = "STUDENT",
-    TUTOR = "TUTOR",
-    ADMIN = "ADMIN"
+    User = "User",
+    Admin = "Admin",
+    Manager = "Manager",
+    Vendor = "Vendor",
+    Organizer = "Organizer"
 }
 
 declare global {
@@ -14,7 +16,7 @@ declare global {
                 id: string;
                 email: string;
                 name: string;
-                role: string;
+                role: UserRole;
                 emailVerified: boolean;
             }
         }

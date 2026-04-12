@@ -12,15 +12,15 @@ router.get("/:id", tutorController.tutorDetails);
 
 
 // get the private routes
-router.get("/", auth(UserRole.TUTOR), tutorController.getTutorDashboard)
+router.get("/", auth(UserRole.User), tutorController.getTutorDashboard)
 
-router.get("/availability", auth(UserRole.TUTOR), tutorController.getAvailability);
+router.get("/availability", auth(UserRole.User), tutorController.getAvailability);
 
-router.post("/profile", auth(UserRole.TUTOR), tutorController.createTutorProfile)
+router.post("/profile", auth(UserRole.User), tutorController.createTutorProfile)
 
-router.put("/profile", auth(UserRole.TUTOR), tutorController.updateTutorProfile)
+router.put("/profile", auth(UserRole.User), tutorController.updateTutorProfile)
 
-router.put("/availability", auth(UserRole.TUTOR), tutorController.setAvailability)
+router.put("/availability", auth(UserRole.User), tutorController.setAvailability)
 
 
 

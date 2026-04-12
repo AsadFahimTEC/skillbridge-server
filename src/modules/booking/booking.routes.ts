@@ -6,17 +6,17 @@ const router = express.Router();
 
 // get the private routes
 
-router.get("/", auth(UserRole.STUDENT), bookingController.getMyBookings);
+router.get("/", auth(UserRole.User), bookingController.getMyBookings);
 
-router.get("/:id", auth(UserRole.STUDENT), bookingController.getBookingDetails);
+router.get("/:id", auth(UserRole.User), bookingController.getBookingDetails);
 
-router.get("/", auth(UserRole.STUDENT), bookingController.getAllTutors);
+router.get("/", auth(UserRole.User), bookingController.getAllTutors);
 
-router.post("/", auth(UserRole.STUDENT), bookingController.createBooking);
+router.post("/", auth(UserRole.User), bookingController.createBooking);
 
-router.put("/profiles", auth(UserRole.STUDENT), bookingController.updateTutorProfile);
+router.put("/profiles", auth(UserRole.User), bookingController.updateTutorProfile);
 
-router.patch("/:id", auth(UserRole.STUDENT), bookingController.cancelBooking);
+router.patch("/:id", auth(UserRole.User), bookingController.cancelBooking);
 
 
 export const bookingRouter: Router = router;

@@ -4,11 +4,11 @@ import { adminController } from "./admin.controller";
 
 const router = express.Router();
 
-router.get("/users", auth(UserRole.ADMIN), adminController.getUsers);
+router.get("/users", auth(UserRole.Admin), adminController.getUsers);
 
-router.get("/bookings", auth(UserRole.ADMIN), adminController.getAllBookings);
+router.get("/bookings", auth(UserRole.Admin), adminController.getAllBookings);
 
-router.patch("/users/:id", auth(UserRole.ADMIN), adminController.updateUserStatus);
+router.patch("/users/:id", auth(UserRole.Admin), adminController.updateUserStatus);
 
 
 export const adminRouter: Router = router;

@@ -10,7 +10,7 @@ async function seedAdmin() {
             name: "Admin Shaheb",
             email: "admin6@skillbridge.com",
             password: "admin1234",
-            role: UserRole.ADMIN,
+            role: UserRole.Admin,
         }
         console.log("***** Checking Admin Exist or not");
         // check user exist on db or not
@@ -24,11 +24,11 @@ async function seedAdmin() {
             throw new Error("User already exits!!");
         }
 
-        const signUpAdmin = await fetch("http://localhost:5000/api/auth/sign-up/email", {
+        const signUpAdmin = await fetch("https://skillbridge-server-kappa.vercel.app/api/auth/sign-up/email", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Origin": "http://localhost:3000",
+                "Origin": "https://skillbridge-client-flame.vercel.app",
             },
             body: JSON.stringify(adminData)
         })

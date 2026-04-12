@@ -29,7 +29,7 @@ async function main() {
             id: "tutor-user-1",
             name: "Md. Rahim",
             email: "tutor@test.com",
-            role: "TUTOR",
+            role: "User",
         },
     });
 
@@ -38,7 +38,7 @@ async function main() {
             id: "student-user-1",
             name: "Md. Karim",
             email: "student@test.com",
-            role: "STUDENT",
+            role: "User",
         },
     });
 
